@@ -27,7 +27,10 @@ import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
 
-    private val rtmp = "rtmp://58.200.131.2:1935/livetv/hunantv";
+//   香港财经
+    private val rtmp1 = "rtmp://58.200.131.2:1935/livetv/hunantv"
+//    湖南卫视
+    private val rtmp = "rtmp://58.200.131.2:1935/livetv/hunantv"
 
     private var _progress: Int = 0
     private var isTouch = false

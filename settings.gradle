@@ -1,0 +1,6 @@
+include ':app', 'easy_file_manage', 'easy_common'
+
+project(':easy_common').projectDir = new File('../easy_common/app')
+project(':easy_file_manage').projectDir = new File('../easy_file_manage/app')
+
+rootProject.name='PlayDemo'
