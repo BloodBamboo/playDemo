@@ -79,11 +79,11 @@ void DemoPlay::threadPrepare() {
         // 1、通过 当前流 使用的 编码方式，查找解码器
         AVCodec *dec = avcodec_find_decoder(avCodecParameters->codec_id);
         if (dec == NULL) {
-            LOGE("查找解码器失败:%s", av_err2str(ret));
+            LOGE("查找解码器失败:流编号%d", i);
             if (_isPrepare) {
                 _javaCallHelp->onError(THREAD_CHILD, FFMPEG_FIND_DECODER_FAIL);
             }
-            return;
+            continue;
         }
         //2、获得解码器上下文
         AVCodecContext *avCodecContext = avcodec_alloc_context3(dec);
@@ -93,7 +93,7 @@ void DemoPlay::threadPrepare() {
                 _javaCallHelp->onError(THREAD_CHILD, FFMPEG_ALLOC_CODEC_CONTEXT_FAIL);
             }
 
-            return;
+            continue;
         }
         //3、设置上下文内的一些参数 (context->width)
         ret = avcodec_parameters_to_context(avCodecContext, avCodecParameters);
@@ -103,7 +103,7 @@ void DemoPlay::threadPrepare() {
             if (_isPrepare) {
                 _javaCallHelp->onError(THREAD_CHILD, FFMPEG_CODEC_CONTEXT_PARAMETERS_FAIL);
             }
-            return;
+            continue;
         }
         // 4、打开解码器
         ret = avcodec_open2(avCodecContext, dec, nullptr);
@@ -112,7 +112,7 @@ void DemoPlay::threadPrepare() {
             if (_isPrepare) {
                 _javaCallHelp->onError(THREAD_CHILD, FFMPEG_OPEN_DECODER_FAIL);
             }
-            return;
+            continue;
         }
         // 单位
         AVRational time_base = avStream->time_base;
@@ -165,7 +165,9 @@ void DemoPlay::start() {
     }
     if (videoChannel) {
         // 启动播放
-        videoChannel->setAudioChannel(audioChannel);
+        if (audioChannel) {
+            videoChannel->setAudioChannel(audioChannel);
+        }
         videoChannel->play();
     }
 

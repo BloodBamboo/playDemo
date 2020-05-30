@@ -179,8 +179,7 @@ void VideoChannel::render() {
 //        double extra_delay = frame->repeat_pict * (_fps * 0.5);
         // 真实需要的间隔时间
         double delays = extra_delay + frame_delays;
-
-        if (!_audioChannel) {
+        if (!_audioChannel && _audioChannel->data) {
             //休眠，单位微妙 microseconds
 //        //视频快了
 //        av_usleep(frame_delays*1000000+x);
@@ -188,14 +187,13 @@ void VideoChannel::render() {
 //        av_usleep(frame_delays*1000000-x);
             av_usleep(delays * 1000000);
         } else {
-            if (clock == 0) {
+            if (clock == 0 || _audioChannel->clock == 0) {
                 av_usleep(delays * 1000000);
             } else {
                 //比较音频与视频
                 double audioClock = _audioChannel->clock;
                 //间隔 音视频相差的间隔
                 double diff = clock - audioClock;
-
                 if (diff > 0) {
                     //大于0 表示视频比较快
 #ifdef DEBUG

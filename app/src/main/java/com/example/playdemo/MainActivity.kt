@@ -17,9 +17,6 @@ import cn.com.bamboo.easy_common.help.Permission4MultipleHelp
 import cn.com.bamboo.easy_file_manage.FileManageActivity
 import cn.com.bamboo.easy_file_manage.FileManageActivity.Companion.RESULT_JSON
 import cn.com.bamboo.easy_file_manage.util.FILE_REQUEST
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 import org.json.JSONArray
@@ -85,6 +82,8 @@ class MainActivity : AppCompatActivity() {
                 button_pause.visibility = View.VISIBLE
                 play.setDataSource(edit_loacl_text.text.toString())
                 play.prepare()
+                button_pause.setImageDrawable(resources.getDrawable(android.R.drawable.ic_media_pause))
+                isPause = true
             }
             button2.setOnClickListener { play.stop() }
             button3.setOnClickListener {
@@ -109,14 +108,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             button_pause.setOnClickListener {
-                if (play.getDuration() == 0) {
+                if (play.getDuration() == 0 || !play.isPlaying) {
                     return@setOnClickListener
                 }
                 if (isPause) {
-                    button_pause.setImageDrawable(resources.getDrawable(android.R.drawable.ic_media_pause))
+                    button_pause.setImageDrawable(resources.getDrawable(android.R.drawable.ic_media_play))
                     isPause = false
                 } else {
-                    button_pause.setImageDrawable(resources.getDrawable(android.R.drawable.ic_media_play))
+                    button_pause.setImageDrawable(resources.getDrawable(android.R.drawable.ic_media_pause))
                     isPause = true
                 }
 
@@ -198,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun getInnerSDCardPicturesPath(): String {
-        return Environment.getExternalStorageDirectory().getPath() + "/Pictures/test.mp4"
+        return Environment.getExternalStorageDirectory().getPath() + "/Pictures/test2.mp4"
     }
 
     fun getInnerSDCard(): String {

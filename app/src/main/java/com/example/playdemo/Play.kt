@@ -17,6 +17,7 @@ class Play(listener: OnPlayListener) : SurfaceHolder.Callback {
     private lateinit var _dataSource: String
     private val _listener = listener;
     private var duration: Int = 0;
+    public var isPlaying = true;
 
     fun setSurfaceView(surface: SurfaceView) {
         _surfaceHolder = surface.holder
@@ -37,6 +38,7 @@ class Play(listener: OnPlayListener) : SurfaceHolder.Callback {
     }
 
     fun onPlayEnd() {
+        isPlaying = false;
         Log.e("onPlayEnd", "end");
     }
 
@@ -52,6 +54,7 @@ class Play(listener: OnPlayListener) : SurfaceHolder.Callback {
      */
     fun start() {
         native_start()
+        isPlaying = true;
     }
 
     /**
@@ -63,7 +66,9 @@ class Play(listener: OnPlayListener) : SurfaceHolder.Callback {
     }
 
     fun pause() {
-        native_pause()
+        if (isPlaying) {
+            native_pause()
+        }
     }
 
     fun release() {
