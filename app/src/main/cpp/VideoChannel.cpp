@@ -187,6 +187,7 @@ void VideoChannel::render() {
 //        av_usleep(frame_delays*1000000-x);
             av_usleep(delays * 1000000);
         } else {
+            //如果没有音频数据直接使用默认的睡眠时间
             if (clock == 0 || _audioChannel->clock == 0) {
                 av_usleep(delays * 1000000);
             } else {
